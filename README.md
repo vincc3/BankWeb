@@ -6,6 +6,7 @@ Instructions:
 3. It will run Index.html (a simple HTML page using jQuery AJAX)
 4. The screenshot is /document/capture.png
 
+==========================================
 
 Web API GET method:
 http://localhost:49786/api/Customers
@@ -14,6 +15,12 @@ http://localhost:49786/api/Customers/{id}
 http://localhost:49786/api/Transactions
 http://localhost:49786/api/Transactions/{id}
 
+
+Visual Studio 2017
+WEB API 2
+Entity Framework 6.x
+SQL Server 2017
+.NET Framework 4.5
 
 
 SQL Database [MyDatabase] tables:
