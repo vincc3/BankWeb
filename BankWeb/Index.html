@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Test</title>
+</head>
+<body>
+
+    <div>
+        <h2>All Customers</h2>
+        <ul id="customers" />
+    </div>
+    <div>
+        <h2>Search Customer by ID</h2>
+        <input type="text" id="customerId" size="5" />
+        <input type="button" value="Search" onclick="findCustomer();" />
+        <p id="oneCustomer" />
+    </div>
+    <br />
+    <hr>
+    <br />
+
+    <div>
+        <h2>All Tansactions</h2>
+        <ul id="transactions" />
+    </div>
+    <div>
+        <h2>Search Transaction by ID</h2>
+        <input type="text" id="transactionId" size="5" />
+        <input type="button" value="Search" onclick="findTransaction();" />
+        <p id="oneTransaction" />
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var uriCustomer = 'api/Customers';
+        var uriTransaction = 'api/Transactions';
+
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uriCustomer)
+                .done(function (data) {
+                    //alert(data);
+                    var customerList = JSON.parse(data);
+                    $.each(customerList, function (key, item) {
+                        $('<li>', { text: formatCustomer(item) }).appendTo($('#customers'));
+                    });
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#customers').text('Error: ' + err);
+                });
+
+            $.getJSON(uriTransaction)
+                .done(function (data) {
+                    //alert(data);
+                    var transactionList = JSON.parse(data);
+                    $.each(transactionList, function (key, item) {
+                        $('<li>', { text: formatTransaction(item) }).appendTo($('#transactions'));
+                    });
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#transactions').text('Error: ' + err);
+                });
+        });
+
+        function formatCustomer(item) {
+            return item.FirstName + ' ' + item.LastName + ': [' + item.AccountNumber + ']: ' + item.AccountName + ' : $' + item.AccountBalance + '/' + item.ContactInformation;
+        }
+
+        function findCustomer() {
+            var id = $('#customerId').val();
+            $.getJSON(uriCustomer + '/' + id)
+                .done(function (data) {
+                    var jsonData = JSON.parse(data);
+                    $('#oneCustomer').text(formatCustomer(jsonData));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#oneCustomer').text('Error: ' + err);
+                });
+        }
+
+        function formatTransaction(item) {
+            return '[' + item.Date + ']:[' + item.AccountNumber + '] :  $' + item.Value + ' : ' + item.DebitCredit;
+        }
+
+        function findTransaction() {
+            var id = $('#transactionId').val();
+            $.getJSON(uriTransaction + '/' + id)
+                .done(function (data) {
+                    var jsonData = JSON.parse(data);
+                    $('#oneTransaction').text(formatTransaction(jsonData));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#oneTransaction').text('Error: ' + err);
+                });
+        }
+
+    </script>
+</body>
+</html>
